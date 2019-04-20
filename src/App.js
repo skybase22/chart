@@ -4,6 +4,7 @@ import './App.css';
 import Markmap from './component/Markmap.js'
 import Linechart from './component/Linechart.js'
 import axios from "axios"
+import { Button, Container, Divider, Grid, Header, Image, Menu, Segment,Icon } from 'semantic-ui-react'
 //import Iconsvg from './_ionicons_svg_md-person.svg'
 
 
@@ -36,10 +37,10 @@ import axios from "axios"
         "http://localhost:8000/api/students"
       )
       .then(res => {
-        console.log('res.data', res)
+        //console.log('res.data', res)
         const post = res.data
         this.setState({ posts: post , isLoaded: true});
-        console.log('posts',this.state.posts)
+        //console.log('posts',this.state.posts)
 
       })
       .catch(error => {
@@ -95,6 +96,9 @@ import axios from "axios"
         </Navbar> */}
         <Markmap />
           <Linechart datastudent={lookup} />
+         
+ 
+
         
       </div>
     );

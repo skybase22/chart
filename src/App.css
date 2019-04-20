@@ -63,27 +63,28 @@
 }
 
 .icon1 {
-  color: white;
-  width: 25px;
-  font-size: 100px;
+  color:#61dafb;
+  font-size: 200%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
+  /* transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); */
+  /* text-align: center; */
+  /* width: 15%; */
 }
 .icon2 {
-  color: white;
-  width: 25px;
-  font-size: 100px;
+  color:#61dafb;
+  font-size: 200%;
   position: absolute;
-  top: 48%;
+  top: 50%;
   left: 15%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
+  /* transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); */
+  /* text-align: center; */
+  /* width: 15%; */
 }
+
 
 .fa-user:hover {
   color: white;

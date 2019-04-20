@@ -18,8 +18,12 @@ app.use('/api', bodyParser.urlencoded({ extended: false }), router)
 // var date = `http://mon.phuket.psu.ac.th/arubalog/${finddate}.log`
 var students = []
 var cstudents = []
+var toa = []
 var finddate = ""
-var countst = 0
+var countpush = 0
+var curpush = 0
+var resultid = []
+var outspacename
 router.route('/students')
     // get all bears
     .get((req, res) => res.send(cstudents))
@@ -34,7 +38,7 @@ router.route('/students/date')
 
         try {
             //countData(finddate)
-            res.send(students)
+            res.send(cstudents)
         } catch (error) {
             console.error(error)
         }
@@ -43,7 +47,8 @@ router.route('/students/date')
     .post((req, res) => {
         try {
             finddate = req.body.date
-            console.log("this is finddate22222222222", finddate)
+            console.log("this is finddate22222", finddate)
+
             countData(finddate)
             res.send({ message: 'student created!' })
         } catch (error) {
@@ -68,16 +73,18 @@ const countData = async (dateUrl) => {
     //students = []
     data = await getData(dateUrl)
 
-    console.log('data',data);
+    //console.log('data',data);
     
     if (data.data ) {
         var str = data.data //ข้อมูล
 
-        const strr = str.toString()
+        var strr = str.toString()
 
-        const lines = split.splitn(strr) //ทำข้อมูลเป็น array โดยแบ่งจาก \n
-
-        const resultid = match.atac(lines) //เลือกข้อมูลที่มีการเชื่อมต่อ (522008) แล้วเก็บไว้เป็น array
+        var lines = split.splitn(strr) //ทำข้อมูลเป็น array โดยแบ่งจาก \n
+        resultid = []
+        //console.log(" resultid", resultid)
+        resultid = match.atac(lines) //เลือกข้อมูลที่มีการเชื่อมต่อ (522008) แล้วเก็บไว้เป็น array
+        //console.log(" resulti2", resultid)
 
         let n = (resultid === undefined) ? 0 : resultid.length
 
@@ -91,7 +98,6 @@ const countData = async (dateUrl) => {
             var findap = split.splitspace(resultidfilter[i])//fibdap  เก็บค่า   แต่ละ array ที่มีชื่อและรหัสนักศึกษา ใน array นั้นๆ
 
             var name = match.matchname(findap)
-
             var ap = match.matchap(findap)
             if (findap[1] !== '') {
                 var month = findap[0]
@@ -105,13 +111,21 @@ const countData = async (dateUrl) => {
                 var time = findap[3]
                 var year = findap[4] // name เก็บข้อมูล usename ทั้งหมดที่เชื่อมต่อมา
             }
+            var cutname 
+            var cutap 
+            var cutmonth 
+            var cutday 
+            var cuttime
+            var cutyear
+             cutname = (cutname === undefined) ? name : cutname + name// นำข้อมูล usename ทั้งหมดมาเก็บไว้เป็น string
+             cutap = (cutap === undefined) ? ap : cutap + ap
+             cutmonth = (cutmonth === undefined) ? month : cutmonth + 'month' + month
+             cutday = (cutday === undefined) ? day : cutday + 'day' + day
+           //
+            //console.log("cutday",cutday);
 
-            var cutname = (cutname === undefined) ? name : cutname + name// นำข้อมูล usename ทั้งหมดมาเก็บไว้เป็น string
-            var cutap = (cutap === undefined) ? ap : cutap + ap
-            var cutmonth = (cutmonth === undefined) ? month : cutmonth + 'month' + month
-            var cutday = (cutday === undefined) ? day : cutday + 'day' + day
-            var cuttime = (cuttime === undefined) ? time : cuttime + 'time' + time
-            var cutyear = (cutyear === undefined) ? year : cutyear + 'year' + year
+            cuttime = (cuttime === undefined) ? time : cuttime + 'time' + time
+            cutyear = (cutyear === undefined) ? year : cutyear + 'year' + year
         }
         var tname = split.splitname(cutname) // เก็บ ไอดี นักศึกษา เป็น  array  
 
@@ -122,19 +136,19 @@ const countData = async (dateUrl) => {
         var tday = split.splitday(cutday)
         var tyear = split.splityear(cutyear)
 
-        var outspacename = countrepeat.selectstr(tname) // กรอง '' ออก
-
+        outspacename = countrepeat.selectstr(tname) // กรอง '' ออก
+//-----------------------------------------------------------
         var outspaceap = countrepeat.selectstr(tap)
 
         var repeatname = countrepeat.repeat(outspacename) // เอาเฉพาะข้อมูลที่ไม่ซ้ำ
 
         var countrepeatname = countrepeat.mapp(outspacename) // นับจำนวนครั้งตัวซ้ำ
-
+        //console.log("countrepeatname",countrepeatname)
         var stc = 0
         
         for (let key in outspaceap) {
+
              students.push({
-                
                 student: outspacename[key],
                 AccessPoint: outspaceap[key],
                 year: tyear[key],
@@ -144,12 +158,10 @@ const countData = async (dateUrl) => {
                 //  latitude : null,
                 //  longtitude:null
             })
-           
         }
         // for (let key in outspaceap) {
         // ast.push({as:students})
         // }
-        console.log('this is students', students)
         // for (let key in outspaceap){
         // if(students[key].AccessPoint == 'AP105-5302A')
         //     {
@@ -176,35 +188,39 @@ const countData = async (dateUrl) => {
         for (var pro in countrepeatname) {
             stc += ' ' + countrepeatname[pro] // นำข้อมูลจำนวนครั้งมาเก็บใน stc
         }
-
-        var toa = countrepeat.intt(stc) //ทำเป็น array แล้วแปลงเป็น int
+        //console.log("stc",stc)
+        toa = countrepeat.intt(stc) //ทำเป็น array แล้วแปลงเป็น int
 
         toa.shift()
 
         var cid = 0
 
-        for (var t in toa) {
+        for (let t in toa) {
             cid += toa[t]
         }
         console.log("toa",toa)
 
         const uniqueNames = Array.from(new Set(outspaceap));
-        console.log("uni",repeatname)
-
-        for (let key in repeatname) {
+        
+        curpush = countpush
+        for (let i = 0 ;i< repeatname.length ; i++) {
+            
             cstudents.push({
-               
-               student:repeatname[key],
-               time:toa[key],
-               year:tyear[key],
-               month:tmonth[key],
-               day:tday[key]
+               student:repeatname[i],
+               time:toa[i],
+               year:tyear[i],
+               month:tmonth[i],
+               day:tday[i]
                //  latitude : null,
                //  longtitude:null
            })
-          
+           countpush = countpush + 1
+           //console.log("toa[i+curpush]h",toa[i+curpush])
        }
+       
        console.log("cstudents",cstudents)
+       //console.log("curpush",curpush)
+       
         // const uniqueNames = names.filter((val, id, array) => {
         //     return array.indexOf(val) == id;  
         //  });

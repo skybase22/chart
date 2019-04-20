@@ -2,8 +2,11 @@ const selectstr = str => str.filter(str => /\S/.test(str))
 const sortt = st => st.sort()
 const strxx = strx => { if (strx !== undefined) return strx.toString() }
 const sh = shit => shit.shift()
-var count={}
-const mapp = arr => {arr.forEach(function(i) { count[i] = (count[i]||0) + 1;})
+var count = []
+const mapp = arr => { 
+    count = []
+    arr.forEach(function(i) { 
+    count[i] = (count[i]||0) + 1;})
     return count}
 
 const repeat = re => re.filter(function (item, pos) {
