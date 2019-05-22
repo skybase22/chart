@@ -84,7 +84,8 @@ const countData = async (dateUrl) => {
         resultid = []
         //console.log(" resultid", resultid)
         resultid = match.atac(lines) //เลือกข้อมูลที่มีการเชื่อมต่อ (522008) แล้วเก็บไว้เป็น array
-        console.log(" resulti2", resultid)
+        // console.log(" resulti2", resultid)
+        let unusedVar = 'sdasdsa'
 
         let n = (resultid === undefined) ? 0 : resultid.length
 
